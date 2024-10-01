@@ -12,31 +12,24 @@ const props = defineProps({
 const reference = ref(null);
 const floating = ref(null);
 
-const floatingStyles = ref({});
-
-function openDropdown() {
-  const { floatingStyles: styles } = useFloating(reference, floating, {
-    placement: computed(() => props.content.position),
-    middleware: [offset(10), flip(), shift()],
-    whileElementsMounted: autoUpdate,
-  });
-
-  floatingStyles.value = styles.value;
-}
+const { floatingStyles } = useFloating(reference, floating, {
+  placement: computed(() => props.content.position),
+  middleware: [offset(10), flip(), shift()],
+  whileElementsMounted: autoUpdate,
+});
 </script>
 
 <template>
   <div>
-    <wwElement
-      v-bind="props.content.elementTrigger"
-      ref="reference"
-      @click="openDropdown"
-    />
+    <div ref="reference">
+      <wwElement v-bind="props.content.elementTrigger" @click="openDropdown" />
+    </div>
 
-    <wwElement
-      v-bind="props.content.elementContent"
-      ref="floating"
-      :style="floatingStyles"
-    />
+    <div ref="floating">
+      <wwElement
+        v-bind="props.content.elementContent"
+        :style="floatingStyles"
+      />
+    </div>
   </div>
 </template>
