@@ -10,14 +10,14 @@ export default {
       hidden: true,
       defaultValue: {
         isWwObject: true,
-        type: "3e52c1cd-ede7-4706-bd25-f7286a86ce86",
+        type: "DropdownTrigger",
       },
     },
     elementContent: {
       hidden: true,
       defaultValue: {
         isWwObject: true,
-        type: "b94af123-0a1f-4110-bbfc-6caaad3e5a19",
+        type: "DropdownContent",
       },
     },
     defaultValue: {
@@ -63,6 +63,21 @@ export default {
           { value: "click", label: { en: "Click" } },
           { value: "hover", label: { en: "Hover" } },
           { value: "right-click", label: { en: "Right click" } },
+        ],
+      },
+    },
+    position: {
+      label: {
+        en: "Position",
+      },
+      type: "TextSelect",
+      defaultValue: "bottom",
+      options: {
+        options: [
+          { value: "top", label: { en: "Top" } },
+          { value: "right", label: { en: "Right" } },
+          { value: "bottom", label: { en: "Bottom" } },
+          { value: "left", label: { en: "Left" } },
         ],
       },
     },

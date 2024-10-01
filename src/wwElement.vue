@@ -1,75 +1,42 @@
+<script setup>
+import { ref, computed } from "vue";
+import { useFloating, offset, flip, shift, autoUpdate } from "@floating-ui/vue";
+
+const props = defineProps({
+  content: { type: Object, required: true },
+  uid: { type: String, required: true },
+  wwFrontState: { type: Object, required: true },
+  wwEditorState: { type: Object, required: true },
+});
+
+const reference = ref(null);
+const floating = ref(null);
+
+const floatingStyles = ref({});
+
+function openDropdown() {
+  const { floatingStyles: styles } = useFloating(reference, floating, {
+    placement: computed(() => props.content.position),
+    middleware: [offset(10), flip(), shift()],
+    whileElementsMounted: autoUpdate,
+  });
+
+  floatingStyles.value = styles.value;
+}
+</script>
+
 <template>
   <div>
-    <div
+    <wwElement
+      v-bind="props.content.elementTrigger"
       ref="reference"
-      style="width: 100px; height: 100px; background-color: red"
-    ></div>
-    <div
-      ref="floating"
-      style="width: 100px; height: 100px; background-color: red"
-    ></div>
-    <wwElement
-      v-bind="this.content.elementTrigger"
-      @click="dialogOpen = !dialogOpen"
+      @click="openDropdown"
     />
+
     <wwElement
-      v-bind="this.content.elementContent"
-      :type="this.content.type"
-      :styleSettings="this.styleSettings"
-      :teleport="this.content.teleport"
-      :open="this.isDialogOpen"
-      style="pointer-events: auto"
-      @keyup.escape="
-        this.content.escapeCloses ? (this.dialogOpen = false) : null
-      "
+      v-bind="props.content.elementContent"
+      ref="floating"
+      :style="floatingStyles"
     />
   </div>
 </template>
-
-<script>
-import { useFloating, offset, flip, shift } from "@floating-ui/vue";
-import { ref } from "vue";
-
-export default {
-  props: {
-    content: { type: Object, required: true },
-    uid: { type: String, required: true },
-    wwFrontState: { type: Object, required: true },
-    wwEditorState: { type: Object, required: true },
-  },
-  data() {
-    return {
-      dialogOpen: false,
-    };
-  },
-  computed: {
-    isDialogOpen() {
-      if (this.content.manualControl) {
-        return this.content.value;
-      } else {
-        return this.dialogOpen;
-      }
-    },
-  },
-  watch: {
-    isDialogOpen(newValue) {
-      if (newValue) {
-        const frontDocument = wwLib.getFrontDocument();
-        const appEl = frontDocument.querySelector("body");
-        if (appEl) {
-          // appEl.style.pointerEvents = "none";
-        }
-      } else {
-        // appEl.style.pointerEvents = "auto";
-      }
-    },
-  },
-  mounted() {
-    // Inside your component
-    useFloating(this.$refs.reference, this.$refs.floating, {
-      placement: "right",
-      middleware: [offset(10), flip(), shift()],
-    });
-  },
-};
-</script>
